@@ -1,15 +1,20 @@
-from gui import Ui_MainWindow
-from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QFileDialog
-)
-from PyQt5 import QtCore, QtGui
 import sys
+import os
+from gui import Ui_MainWindow
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog)
+from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtCore import QUrl
 
 class Window(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
         self.browseButton.clicked.connect(self.browseFolders)
+        self.current_directory = os.path.dirname(__file__)
+        self.mappath = os.path.join(self.current_directory, "Map", "index.html")
+        self.web = QWebEngineView()
+        self.web.load(QUrl.fromLocalFile(self.mappath))
+        self.web.show()
 
     def browseFolders(self):
         dlg = QFileDialog()
