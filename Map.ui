@@ -71,7 +71,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="widget_3" native="true"/>
+        <widget class="QWidget" name="MapW" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>748</width>
+           <height>365</height>
+          </size>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

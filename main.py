@@ -1,9 +1,10 @@
 import sys
 import os
 from gui import Ui_MainWindow
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog)
-from PyQt5.QtWebEngineWidgets import *
-from PyQt5.QtCore import QUrl
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog, QVBoxLayout)
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
+from PyQt5.QtCore import QUrl, Qt
+from PyQt5.QtGui import QColor
 
 class Window(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -12,9 +13,13 @@ class Window(QMainWindow, Ui_MainWindow):
         self.browseButton.clicked.connect(self.browseFolders)
         self.current_directory = os.path.dirname(__file__)
         self.mappath = os.path.join(self.current_directory, "Map", "index.html")
-        self.web = QWebEngineView()
+        self.loadMap()
+
+    def loadMap(self):
+        self.web = QWebEngineView(self.MapW)
+        layout = QVBoxLayout(self.MapW)
+        layout.addWidget(self.web)
         self.web.load(QUrl.fromLocalFile(self.mappath))
-        self.web.show()
 
     def browseFolders(self):
         dlg = QFileDialog()
