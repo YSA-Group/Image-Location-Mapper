@@ -16,7 +16,8 @@ class Window(QMainWindow, Ui_MainWindow):
         dlg.setFileMode(QFileDialog.Directory)
         dlg.exec_()
         self.dname=dlg.selectedFiles()
-        self.dirLine.setText(self.dname[0])
+        self.dname=self.dname[0]
+        self.dirLine.setText(self.dname)
 
         
 
