@@ -4,6 +4,7 @@ from gui import Ui_MainWindow
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog, QVBoxLayout)
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtCore import QUrl
+from metadata import image
 
 class Window(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -26,7 +27,14 @@ class Window(QMainWindow, Ui_MainWindow):
         dlg.exec_()
         self.dname=dlg.selectedFiles()
         self.dname=self.dname[0]
-        self.dirLine.setText(self.dname)       
+        self.dirLine.setText(self.dname)   
+        self.images = []
+        for file in os.listdir(self.dname):
+            self.filename = os.fsdecode(file)
+            if self.filename.endswith(".jpg"):
+                self.img = image(self.dname + "/" + file)
+                self.images.append(self.img.returnData())
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

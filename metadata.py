@@ -1,8 +1,10 @@
 import PIL.Image
 import PIL.ExifTags
+import os
 
 class image:
     def __init__(self, imgDir):
+        self.imgDir = imgDir
         self.img = PIL.Image.open(imgDir)
         self.exif = {
             PIL.ExifTags.TAGS[k]: v
@@ -22,6 +24,7 @@ class image:
             self.longitude *= -1
         
         self.dateCreated = self.exif["DateTimeOriginal"]
+    
+    def returnData(self):
+        return {"name": os.path.basename(self.imgDir), "lon": self.longitude, "lat": self.latitude, "dateCreated": self.dateCreated}
 
-        
-test = image("test.jpg")
