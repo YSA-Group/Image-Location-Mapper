@@ -3,8 +3,7 @@ import os
 from gui import Ui_MainWindow
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog, QVBoxLayout)
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
-from PyQt5.QtCore import QUrl, Qt
-from PyQt5.QtGui import QColor
+from PyQt5.QtCore import QUrl
 
 class Window(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -27,9 +26,7 @@ class Window(QMainWindow, Ui_MainWindow):
         dlg.exec_()
         self.dname=dlg.selectedFiles()
         self.dname=self.dname[0]
-        self.dirLine.setText(self.dname)
-
-        
+        self.dirLine.setText(self.dname)       
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
