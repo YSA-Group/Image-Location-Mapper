@@ -2,7 +2,7 @@ import PIL.Image
 import PIL.ExifTags
 import os
 
-class image:
+class Image:
     def __init__(self, imgDir):
         self.imgDir = imgDir
         self.img = PIL.Image.open(imgDir)
@@ -27,4 +27,3 @@ class image:
     
     def returnData(self):
         return {"name": os.path.basename(self.imgDir), "lon": self.longitude, "lat": self.latitude, "dateCreated": self.dateCreated}
-
