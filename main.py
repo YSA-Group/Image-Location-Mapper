@@ -1,6 +1,7 @@
 import sys
 import os
 from flask import Flask, jsonify
+from flask_cors import CORS
 from gui import Ui_MainWindow
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QFileDialog, QVBoxLayout)
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -8,6 +9,8 @@ from PyQt5.QtCore import QUrl
 from metadata import Image
 
 app = Flask(__name__)
+CORS(app)
+
 win = None
 
 class Window(QMainWindow, Ui_MainWindow):
@@ -27,6 +30,21 @@ class Window(QMainWindow, Ui_MainWindow):
         layout = QVBoxLayout(self.MapW)
         layout.addWidget(self.web)
         self.web.load(QUrl.fromLocalFile(self.mappath))
+        from threading import Thread
+
+        def run_flask():
+            app.run()
+
+        flask_thread = Thread(target=run_flask)
+        flask_thread.start()
+
+    # Implement the route for getting data
+    @app.route('/get_data')
+    def get_data():
+        js_longitude = win.longitude
+        js_latitude = win.latitude
+        return jsonify({"longitude": js_longitude, "latitude": js_latitude})
+
 
     def browseFolders(self):
         dlg = QFileDialog()
@@ -44,27 +62,10 @@ class Window(QMainWindow, Ui_MainWindow):
         self.longitude = self.images[0]["lon"]
         self.latitude = win.images[0]["lat"]
 
-# Collecting data to be imported into the JavaScript
-@app.route('/get_data')
-def get_data():
-    win = Window()
-    js_longitude = win.longitude
-    js_latitude = win.latitude
-    return jsonify({"longitude": js_longitude, "latitude": js_latitude})
-    
-def run_flask_app():
-    app.run()
 
 if __name__ == "__main__":
-    from multiprocessing import Process
-    import time
-    
-    flask_process = Process(target=run_flask_app)
-    flask_process.start()
-
-    time.sleep(2)
-
     windows_app = QApplication(sys.argv)
     win = Window()
     win.show()
-    sys.exit(windows_app.exec())
+    sys.exit(windows_app.exec_())
+    
