@@ -24,55 +24,58 @@
 <body>
     <div id="map"></div>
     <script>
+        let longitude, latitude; // Declare the variables in a higher scope
+
         fetch('http://127.0.0.1:5000/get_data')
             .then(response => response.json())
-            .then(({ longitude, latitude }) => {
+            .then(data => {
+                // Assign the values received from the server to the variables
+                longitude = data.longitude;
+                latitude = data.latitude;
+
                 // Handle the values received from the server
                 console.log('Longitude:', longitude);
                 console.log('Latitude:', latitude);
+
+                // Create a map object
+                const map = new ol.Map({
+                    target: 'map',
+                    layers: [
+                        new ol.layer.Tile({
+                            source: new ol.source.TileJSON({
+                                url: 'https://api.maptiler.com/maps/basic-v2/tiles.json?key=PziuQIunoweJCJXRsJMP',
+                                tileSize: 512,
+                            })
+                        }),
+                    ],
+                    view: new ol.View({
+                        center: ol.proj.fromLonLat([-43.206091, -22.920387]), // Now you can use the variables here
+                        zoom: 13,
+                    }),
+                });
+                const marker = new ol.layer.Vector({
+                    source: new ol.source.Vector({
+                        features: [
+                            new ol.Feature({
+                                geometry: new ol.geom.Point(
+                                    ol.proj.fromLonLat([longitude, latitude])
+                                )
+                            })
+                        ],
+                    }),
+                    style: new ol.style.Style({
+                        image: new ol.style.Icon({
+                            src: 'https://docs.maptiler.com/openlayers/default-marker/marker-icon.png'
+                        })
+                    })
+                })
+
+                map.addLayer(marker);
             })
             .catch(error => {
                 // Handle any errors
                 console.error(error);
             });
-    </script>
-
-    <script>
-        // Create a map object
-        const map = new ol.Map({
-            target: 'map',
-            layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.TileJSON({
-                        url: 'https://api.maptiler.com/maps/basic-v2/tiles.json?key=PziuQIunoweJCJXRsJMP',
-                        tileSize: 512,
-                    })
-                }),
-            ],
-            view: new ol.View({
-                center: ol.proj.fromLonLat([-43.206091, -22.920387]),
-                zoom: 13,
-            }),
-        });
-        const marker = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: [
-                    new ol.Feature({
-                        geometry: new ol.geom.Point(
-                            ol.proj.fromLonLat([longitude, latitude])
-                        )
-                    })
-                ],
-            }),
-            style: new ol.style.Style({
-                image: new ol.style.Icon({
-                    src: 'https://docs.maptiler.com/openlayers/default-marker/marker-icon.png'
-                })
-            })
-        })
-
-        map.addLayer(marker)
-
     </script>
 
 </body>

@@ -59,6 +59,7 @@ class Window(QMainWindow, Ui_MainWindow):
             if self.filename.endswith(".jpg"):
                 self.img = Image(self.dname + "/" + file)
                 self.images.append(self.img.returnData())
+                self.web.load(QUrl.fromLocalFile(self.mappath))
         self.longitude = self.images[0]["lon"]
         self.latitude = win.images[0]["lat"]
 
