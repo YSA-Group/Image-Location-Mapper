@@ -68,3 +68,4 @@ if __name__ == "__main__":
     win = Window()
     win.show()
     sys.exit(windows_app.exec_())
+    
